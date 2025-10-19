@@ -1,0 +1,34 @@
+# ======================================================
+# 🧩 DOCKER COMPOSE OVERRIDE – DEVELOPMENT MODE
+# Used for local testing & hot reload
+# ======================================================
+
+services:
+  # ======================================================
+  # ⚙️ BACKEND API – DEV SETTINGS
+  # ======================================================
+  backend-api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../Weather Project on DevelopmentServer/Backend:/app
+      - logs:/app/logs
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+
+  # ======================================================
+  # 🌐 FRONTEND – DEV SETTINGS
+  # ======================================================
+  frontend:
+    environment:
+      NODE_ENV: "development"
+    ports:
+      - "5173:80"
+    volumes:
+      - ../Weather Project on DevelopmentServer/Frontend:/usr/share/nginx/html
+      - logs:/var/log/nginx

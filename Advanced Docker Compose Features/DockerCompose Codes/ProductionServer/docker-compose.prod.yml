@@ -1,0 +1,55 @@
+# ======================================================
+# 🚀 DOCKER COMPOSE – PRODUCTION CONFIGURATION
+# Optimized for deployment with resource limits & stability
+# ======================================================
+
+services:
+  # ======================================================
+  # ⚙️ BACKEND API – PRODUCTION SETTINGS
+  # ======================================================
+  backend-api:
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+        reservations:
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/weatherforecast"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: always
+    volumes:
+      - logs:/app/logs
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ======================================================
+  # 🌐 FRONTEND – PRODUCTION SETTINGS
+  # ======================================================
+  frontend:
+    environment:
+      NODE_ENV: "production"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: always
+    volumes:
+      - logs:/var/log/nginx
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
